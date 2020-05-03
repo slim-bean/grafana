@@ -159,12 +159,13 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
 
   createRangeQuery(target: LokiQuery, options: RangeQueryOptions): LokiRangeQueryRequest {
     const query = target.expr;
-    let range: { start?: number; end?: number; step?: number } = {};
+    let range: { start?: number; end?: number; step?: number; interval?: number } = {};
     if (options.range) {
       const startNs = this.getTime(options.range.from, false);
       const endNs = this.getTime(options.range.to, true);
       const rangeMs = Math.ceil((endNs - startNs) / 1e6);
       const step = Math.ceil(this.adjustInterval(options.intervalMs || 1000, rangeMs) / 1000);
+      const interval = options.intervalMs ? options.intervalMs / 1000 : 0;
       const alignedTimes = {
         start: startNs - (startNs % 1e9),
         end: endNs + (1e9 - (endNs % 1e9)),
@@ -174,6 +175,7 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
         start: alignedTimes.start,
         end: alignedTimes.end,
         step,
+        interval,
       };
     }
 
