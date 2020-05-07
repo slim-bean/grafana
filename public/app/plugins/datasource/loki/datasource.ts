@@ -53,7 +53,7 @@ const RANGE_QUERY_ENDPOINT = `${LOKI_ENDPOINT}/query_range`;
 const INSTANT_QUERY_ENDPOINT = `${LOKI_ENDPOINT}/query`;
 
 const DEFAULT_QUERY_PARAMS: Partial<LokiRangeQueryRequest> = {
-  direction: 'BACKWARD',
+  direction: 'FORWARD',
   limit: DEFAULT_MAX_LINES,
   query: '',
 };
