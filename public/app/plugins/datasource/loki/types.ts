@@ -31,6 +31,7 @@ export interface LokiQuery extends DataQuery {
   legendFormat?: string;
   valueWithRefId?: boolean;
   maxLines?: number;
+  useInterval?: boolean;
 }
 
 export interface LokiOptions extends DataSourceJsonData {

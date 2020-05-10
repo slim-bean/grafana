@@ -10,7 +10,10 @@ import {
   QueryField,
   TypeaheadInput,
   BracesPlugin,
+  LegacyForms,
 } from '@grafana/ui';
+
+const { Switch } = LegacyForms;
 
 // Utils & Services
 // dom also includes Element polyfills
@@ -72,7 +75,11 @@ export interface LokiQueryFieldFormProps extends ExploreQueryFieldProps<LokiData
   ExtraFieldElement?: ReactNode;
 }
 
-export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormProps> {
+interface State {
+  useInterval: boolean;
+}
+
+export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormProps, State> {
   plugins: Plugin[];
 
   constructor(props: LokiQueryFieldFormProps, context: React.Context<any>) {
@@ -85,6 +92,10 @@ export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormPr
         getSyntax: (node: Node) => 'promql',
       }),
     ];
+    // Query target properties that are fully controlled inputs
+    this.state = {
+      useInterval: props.query.useInterval ? props.query.useInterval : false,
+    };
   }
 
   loadOptions = (selectedOptions: CascaderOption[]) => {
@@ -110,6 +121,17 @@ export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormPr
       if (override && onRunQuery) {
         onRunQuery();
       }
+    }
+  };
+
+  onUseIntervalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const useInterval = event.target.checked;
+    // Send text change to parent
+    const { query, onChange, onRunQuery } = this.props;
+    if (onChange) {
+      const nextQuery = { ...query, useInterval: useInterval };
+      onChange(nextQuery);
+      this.setState({ useInterval }, onRunQuery);
     }
   };
 
@@ -149,6 +171,7 @@ export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormPr
     const hasLogLabels = logLabelOptions && logLabelOptions.length > 0;
     const chooserText = getChooserText(syntaxLoaded, hasLogLabels);
     const buttonDisabled = !(syntaxLoaded && hasLogLabels);
+    const { useInterval } = this.state;
 
     return (
       <>
@@ -177,6 +200,14 @@ export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormPr
               placeholder="Enter a Loki query"
               portalOrigin="loki"
               syntaxLoaded={syntaxLoaded}
+            />
+          </div>
+          <div className="gf-form">
+            <Switch
+              label="Use Interval"
+              tooltip="Enable to send the interval variable to Loki, WARNING this will result in partial logs received from Loki."
+              checked={useInterval}
+              onChange={this.onUseIntervalChange}
             />
           </div>
           {ExtraFieldElement}

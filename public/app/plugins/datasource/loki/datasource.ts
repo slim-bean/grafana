@@ -165,7 +165,8 @@ export class LokiDatasource extends DataSourceApi<LokiQuery, LokiOptions> {
       const endNs = this.getTime(options.range.to, true);
       const rangeMs = Math.ceil((endNs - startNs) / 1e6);
       const step = Math.ceil(this.adjustInterval(options.intervalMs || 1000, rangeMs) / 1000);
-      const interval = options.intervalMs ? options.intervalMs / 1000 : 0;
+      console.log('interval:' + target.useInterval);
+      const interval = target.useInterval ? (options.intervalMs ? options.intervalMs / 1000 : 0) : 0;
       const alignedTimes = {
         start: startNs - (startNs % 1e9),
         end: endNs + (1e9 - (endNs % 1e9)),
