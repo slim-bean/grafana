@@ -205,7 +205,7 @@ export class LokiQueryFieldForm extends React.PureComponent<LokiQueryFieldFormPr
           <div className="gf-form">
             <Switch
               label="Use Interval"
-              tooltip="Enable to send the interval variable to Loki, WARNING this will result in partial logs received from Loki."
+              tooltip="Enable to send the interval variable to Loki, WARNING this will result in partial logs received from Loki, entries will only be returned at the requested interval. Only enable this for 'metric' style Loki data"
               checked={useInterval}
               onChange={this.onUseIntervalChange}
             />

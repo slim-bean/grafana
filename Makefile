@@ -133,8 +133,8 @@ build-docker-dev: ## Build Docker image for development (fast).
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
-	docker buildx build --platform linux/arm/v7 --tag slimbean/grafana:interval --push .
-	#docker build --tag slimbean/grafana:arm .
+	#docker buildx build --platform linux/arm/v7 --tag slimbean/grafana:interval --push .
+	docker build --tag slimbean/grafana:interval .
 
 ##@ Services
 
