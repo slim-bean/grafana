@@ -129,12 +129,12 @@ build-docker-dev: ## Build Docker image for development (fast).
 	@echo "\033[92mInfo:\033[0m the frontend code is expected to be built already."
 	$(GO) run build.go -goos linux -goarch armv7 -pkg-arch armv7 -cc /home/ed/GolandProjects/grafana/raspicc/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc ${OPT} build pkg-archive latest
 	cp dist/grafana-latest.linux-armv7.tar.gz packaging/docker
-	cd packaging/docker && docker buildx build --build-arg "GRAFANA_TGZ=grafana-latest.linux-armv7.tar.gz" --platform linux/arm/v7 --tag slimbean/grafana:interval --push -f ubuntu.Dockerfile .
+	cd packaging/docker && docker buildx build --build-arg "GRAFANA_TGZ=grafana-latest.linux-armv7.tar.gz" --platform linux/arm/v7 --tag slimbean/grafana-arm:latest --push -f ubuntu.Dockerfile .
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
 	#docker buildx build --platform linux/arm/v7 --tag slimbean/grafana:interval --push .
-	docker build --tag slimbean/grafana:interval .
+	docker build --tag slimbean/grafana-amd:latest .
 
 ##@ Services
 
